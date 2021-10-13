@@ -139,23 +139,28 @@ def find_nearest(lst, val):
     return idx
 
 
-# Loopt van -20°C tot 105°C met stapgrote van 1°C
-raw_temp = np.arange(-20, 105+1, 1)
-# Loopt van -20°C tot 105°C met stapgrote van 0.1°C
-interp_temp = np.arange(-20, 105+0.1, 0.1)
+def main():
+    # Loopt van -20°C tot 105°C met stapgrote van 1°C
+    raw_temp = np.arange(-20, 105+1, 1)
+    # Loopt van -20°C tot 105°C met stapgrote van 0.1°C
+    interp_temp = np.arange(-20, 105+0.1, 0.1)
 
-# Interpoleer naar van stapgrote van 1°C naar stapgrote van 0.1°C
-interp = interpolate.interp1d(raw_temp, raw_NTC, kind='quadratic', fill_value='extrapolate')
-interp_NTC = interp(interp_temp)
+    # Interpoleer naar van stapgrote van 1°C naar stapgrote van 0.1°C
+    interp = interpolate.interp1d(raw_temp, raw_NTC, kind='quadratic', fill_value='extrapolate')
+    interp_NTC = interp(interp_temp)
 
-inpt = input("Voer gemeten waardes in Ohm in. Voorbeeld: '5921 5872 5721...'\n").rstrip().split()
+    inpt = input("Voer gemeten waardes in Ohm in. Voorbeeld: '5921 5872 5721...'\n").rstrip().split()
 
-# Loopt langs elke ingevoerde waarde
-for n in inpt:
-    print("%s ohm is %s° Celsius" % (n, round(interp_temp[find_nearest(interp_NTC, float(n))], 1)))
+    # Loopt langs elke ingevoerde waarde
+    for n in inpt:
+        print("%s ohm is %s° Celsius" % (n, round(interp_temp[find_nearest(interp_NTC, float(n))], 1)))
 
-# Laat geïnterpoleerde tabel zien (voor excel)
-if input("\nLaat geïnterpoleerde tabel zien? y/N\n").capitalize() == 'Y':
-    for r in interp_NTC:
-        # Rond af op 1 significante voor afronden
-        print("%.1f" % r)
+    # Laat geïnterpoleerde tabel zien (voor excel)
+    if input("\nLaat geïnterpoleerde tabel zien? y/N\n").capitalize() == 'Y':
+        for r in interp_NTC:
+            # Rond af op 1 significante voor afronden
+            print("%.1f" % r)
+
+
+if __name__ == "__main__":
+    main()
